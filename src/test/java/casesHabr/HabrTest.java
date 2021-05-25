@@ -152,7 +152,7 @@ public class HabrTest extends HabrBaseTest {
                 .news()
                 .openFirstArticle();
 
-        WebElement titleNews = driver.findElement(By.xpath("//h2[contains(@class, 'post__title')]"));
+        WebElement titleNews = driver.findElement(By.xpath("//h1[contains(@class, 'post__title')]"));
         String textTitleNews = titleNews.getText();
         Assert.assertEquals(habrNewsPage.getTitleNewsFirst(), textTitleNews);
     }
