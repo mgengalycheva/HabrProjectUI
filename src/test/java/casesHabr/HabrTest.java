@@ -98,21 +98,21 @@ public class HabrTest extends HabrBaseTest {
         logger.info("Search page HABR has myText search");
     }
 
-    @Epic("Testing HABR")
-    @Feature(value="users page functionality")
-    @Severity(SeverityLevel.CRITICAL)
-    @Description("Checking the user that was searched is on the list")
-    @Test
-    public void habrTest5() {
-        String myUserSearch = "oldadmin";
-        HabrMainPage habrMainPage = new HabrMainPage(driver);
-        habrMainPage.open()
-                    .users()
-                    .search(myUserSearch);
-        String xpath = "//*[contains(@class, 'list-snippet__username')]/a[contains(@class,'list-snippet__nickname') and contains(text(), '" + myUserSearch + "')]";
-        WebElement userText = driver.findElement(By.xpath(xpath));
-        Assert.assertEquals(userText.getText(), myUserSearch);
-    }
+//    @Epic("Testing HABR")
+//    @Feature(value="users page functionality")
+//    @Severity(SeverityLevel.CRITICAL)
+//    @Description("Checking the user that was searched is on the list")
+//    @Test
+//    public void habrTest5() {
+//        String myUserSearch = "oldadmin";
+//        HabrMainPage habrMainPage = new HabrMainPage(driver);
+//        habrMainPage.open()
+//                    .users()
+//                    .search(myUserSearch);
+//        String xpath = "//*[contains(@class, 'list-snippet__username')]/a[contains(@class,'list-snippet__nickname') and contains(text(), '" + myUserSearch + "')]";
+//        WebElement userText = driver.findElement(By.xpath(xpath));
+//        Assert.assertEquals(userText.getText(), myUserSearch);
+//    }
 
     @Epic("Testing HABR")
     @Feature(value="modal language window functionality")
