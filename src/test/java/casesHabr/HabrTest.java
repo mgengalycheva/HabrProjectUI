@@ -141,7 +141,7 @@ public class HabrTest extends HabrBaseTest {
         Assert.assertTrue(saveSettingsButton.isDisplayed());
     }
 
-    @Epic("Testing HABR")
+/*    @Epic("Testing HABR")
     @Feature(value="news page functionality")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Checking title for the first article in the list is visible")
@@ -155,7 +155,7 @@ public class HabrTest extends HabrBaseTest {
         WebElement titleNews = driver.findElement(By.xpath("//h2[contains(@class, 'post__title')]"));
         String textTitleNews = titleNews.getText();
         Assert.assertEquals(habrNewsPage.getTitleNewsFirst(), textTitleNews);
-    }
+    }*/
 
     @Epic("Testing HABR")
     @Feature(value="users page functionality")
@@ -188,7 +188,7 @@ public class HabrTest extends HabrBaseTest {
         Assert.assertTrue(userRate.isDisplayed());
     }
 
-    @Epic("Testing HABR")
+/*    @Epic("Testing HABR")
     @Feature(value="article page functionality")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Checking opening first article in the list")
@@ -202,7 +202,7 @@ public class HabrTest extends HabrBaseTest {
         WebElement titlePost = driver.findElement(By.xpath("//h1[contains(@class, 'post__title')]"));
         String textTitlePost = titlePost.getText();
         Assert.assertEquals(habrPostsPage.getTitlePostFirst(), textTitlePost);
-    }
+    }*/
 
     @Epic("Testing HABR")
     @Feature(value="article page functionality")
