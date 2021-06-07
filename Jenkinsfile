@@ -14,27 +14,32 @@ pipeline {
         }
 		stage('Clean') {
             steps {
-                echo "tests execute"
+                echo "clean tests"
                 sh 'mvn clean'
             }
         }
 		stage('Test') {
             steps {
-                echo "tests run"
+                echo "run test"
                 sh 'mvn test'
-
-            }
-        }
-        stage('results') {
-            steps {
-                echo 'tests execution'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'target/allure-results']]
-                ])
+                try {
+                    echo "nothing"
+                } catch(e) {
+                    echo "nothing"
+                } finally {
+                    stage('reports') {
+                        steps {
+                            echo 'tests result generation'
+                            allure([
+                                includeProperties: false,
+                                jdk: '',
+                                properties: [],
+                                reportBuildPolicy: 'ALWAYS',
+                                results: [[path: 'target/allure-results']]
+                            ])
+                        }
+                    }
+                }
             }
         }
     }
