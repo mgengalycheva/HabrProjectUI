@@ -21,11 +21,11 @@ pipeline {
 		stage('Test') {
             steps {
                 echo "run test"
-                sh 'mvn test'
                 try {
+                    sh 'mvn test'
+                } catch(Exception e) {
                     echo "nothing"
-                } catch(e) {
-                    echo "nothing"
+                    throw e;
                 } finally {
                     stage('reports') {
                         steps {
