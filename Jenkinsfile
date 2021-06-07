@@ -20,28 +20,29 @@ pipeline {
         }
 		stage('Test') {
             steps {
-                echo "run test"
-                try {
-                    sh 'mvn test'
-                } catch(Exception e) {
-                    echo "nothing"
-                    throw e;
-                } finally {
-                    stage('reports') {
-                        steps {
-                            echo 'tests result generation'
-                            allure([
-                                includeProperties: false,
-                                jdk: '',
-                                properties: [],
-                                reportBuildPolicy: 'ALWAYS',
-                                results: [[path: 'target/allure-results']]
-                            ])
-                        }
-                    }
-                }
+                echo "run tests"
+                sh 'mvn test'
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'target/allure-results']]
+                ])
             }
         }
+        /* stage('reports') {
+            steps {
+                echo 'tests result generation'
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'target/allure-results']]
+                ])
+            }
+        } */
     }
     post {
         always {
