@@ -37,12 +37,6 @@ pipeline {
                 ])
             }
         }
-        stage('allure report') {
-            steps {
-                echo 'generate allure report'
-                sh 'mvn allure:serve'
-            }
-        }
     }
     post {
         always {
