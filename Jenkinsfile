@@ -21,20 +21,22 @@ pipeline {
 		stage('Test') {
             steps {
                 echo "run tests"
-                try {
-                    sh 'mvn test'
-                } catch (e) {
-                    currentBuild.result = 'FAILURE'
-                    throw e
-                } finally {
-                    stage('allure reports') {
-                        allure([
-                            includeProperties: false,
-                            jdk: '',
-                            properties: [],
-                            reportBuildPolicy: 'ALWAYS',
-                            results: [[path: 'target/allure-results']]
-                        ])
+                script {
+                    try {
+                        sh 'mvn test'
+                    } catch (e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    } finally {
+                        stage('allure reports') {
+                            allure([
+                                includeProperties: false,
+                                jdk: '',
+                                properties: [],
+                                reportBuildPolicy: 'ALWAYS',
+                                results: [[path: 'target/allure-results']]
+                            ])
+                        }
                     }
                 }
             }
