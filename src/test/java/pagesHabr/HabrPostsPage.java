@@ -9,9 +9,9 @@ import java.util.List;
 
 public class HabrPostsPage extends HabrBasePage{
 
-    public List<WebElement> posts = driver.findElements(By.xpath("//li[contains(@class, 'content-list__item_post')]//h2[contains(@class, 'post__title')]"));
+    public List<WebElement> posts = driver.findElements(By.xpath("//a[contains(@class, 'tm-article-snippet__title-link')]//span"));
     private final String titlePostFirst = posts.get(0).getText();
-    public List<WebElement> postAuthors = driver.findElements(By.xpath("//a[contains(@class, 'post__user-info user-info') and (@title='Автор публикации' )] "));
+    public List<WebElement> postAuthors = driver.findElements(By.xpath("//a[contains(@class, 'tm-user-info__username') ]"));
 
     public HabrPostsPage(WebDriver driver) {
         super(driver);

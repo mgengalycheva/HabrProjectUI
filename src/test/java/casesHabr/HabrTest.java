@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pagesHabr.HabrMainPage;
 import pagesHabr.HabrNewsPage;
 import pagesHabr.HabrPostsPage;
@@ -32,6 +34,7 @@ public class HabrTest extends HabrBaseTest {
     public void habrTest2() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                    .profileWindow()
                     .auth();
 
         WebElement authTitle = driver.findElement(By.xpath("//div[contains(text(),'Вход')]"));
@@ -47,6 +50,7 @@ public class HabrTest extends HabrBaseTest {
     public void habrTest14() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                .profileWindow()
                 .auth();
 
         WebElement enterButton = driver.findElement(By.xpath("//button[@name = 'go']"));
@@ -61,6 +65,7 @@ public class HabrTest extends HabrBaseTest {
     public void habrTest3() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                .profileWindow()
                 .reg();
 
         WebElement regTitle = driver.findElement(By.xpath("//div[contains(text(),'Регистрация')]"));
@@ -76,6 +81,7 @@ public class HabrTest extends HabrBaseTest {
     public void habrTest15() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                .profileWindow()
                 .reg();
 
         WebElement registrationButton = driver.findElement(By.xpath("//button[@id = 'registration_button']"));
@@ -92,9 +98,21 @@ public class HabrTest extends HabrBaseTest {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
                 .search(myText);
-        String xpath = "//input[contains(@value,'" + myText + "')]";
-        WebElement searchText = driver.findElement(By.xpath(xpath));
-        Assert.assertEquals(searchText.getAttribute("value"), myText);
+
+        WebDriverWait wait = new WebDriverWait(driver,5);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tm-articles-list']")));
+
+        String title = driver.getTitle();
+
+        String [] splitTitle1 = title.split("«");
+
+        String partOfTitle1 = splitTitle1[1];
+
+        String [] splitTitle2 = partOfTitle1.split("»");
+
+        String partOfTitle2 = splitTitle2[0];
+
+        Assert.assertEquals(partOfTitle2, myText);
         logger.info("Search page HABR has myText search");
     }
 
@@ -104,14 +122,18 @@ public class HabrTest extends HabrBaseTest {
     @Description("Checking the user that was searched is on the list")
     @Test
     public void habrTest5() {
-        String myUserSearch = "oldadmin";
+        String myUserSearch = "@oldadmin";
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
                     .users()
                     .search(myUserSearch);
-        //String xpath = "//*[contains(@class, 'list-snippet__username')]/a[contains(@class,'list-snippet__nickname') and contains(text(), '" + myUserSearch + "')]";
-        //WebElement userText = driver.findElement(By.xpath(xpath));
-        //Assert.assertEquals(userText.getText(), myUserSearch);
+
+        WebElement userText = driver.findElement(By.xpath("//a[contains(., '@oldadmin')]"));
+
+        WebDriverWait wait = new WebDriverWait(driver,5);
+        wait.until(ExpectedConditions.visibilityOf(userText));
+
+        Assert.assertEquals(userText.getText(), myUserSearch);
     }
 
     @Epic("Testing HABR")
@@ -122,7 +144,9 @@ public class HabrTest extends HabrBaseTest {
     public void habrTest6() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                .profileWindow()
                 .openLangPopup();
+
         Assert.assertTrue(habrMainPage.showLangPopup().isDisplayed());
         logger.info("lang popup is visible");
     }
@@ -130,14 +154,15 @@ public class HabrTest extends HabrBaseTest {
     @Epic("Testing HABR")
     @Feature(value="modal language window functionality")
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Checking save settings button is vissible on modal language window")
+    @Description("Checking save settings button is visible on modal language window")
     @Test
     public void habrTest13() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
         habrMainPage.open()
+                .profileWindow()
                 .openLangPopup();
 
-        WebElement saveSettingsButton = driver.findElement(By.xpath("//div[@class='form__footer form__footer_lang-settings']"));
+        WebElement saveSettingsButton = driver.findElement(By.xpath("//button[contains(@class, 'tm-page-settings-form__submit')]"));
         Assert.assertTrue(saveSettingsButton.isDisplayed());
     }
 
@@ -152,8 +177,9 @@ public class HabrTest extends HabrBaseTest {
                 .news()
                 .openFirstArticle();
 
-        WebElement titleNews = driver.findElement(By.xpath("//h2[contains(@class, 'post__title')]"));
+        WebElement titleNews = driver.findElement(By.xpath("//h1[contains(@class, 'tm-article-snippet__title_h1')]//span"));
         String textTitleNews = titleNews.getText();
+        System.out.println("==========" + textTitleNews);
         Assert.assertEquals(habrNewsPage.getTitleNewsFirst(), textTitleNews);
     }
 
@@ -168,9 +194,9 @@ public class HabrTest extends HabrBaseTest {
                 .users()
                 .openPersonalInfoFirstUser();
 
-        WebElement firstRate = driver.findElement(By.xpath("(//li[@class='defination-list__item defination-list__item_profile-summary'])[1]//a"));
+        WebElement firstRate = driver.findElements(By.xpath("//div[@class = 'tm-user-basic-info']//dd[contains(@class, 'tm-description-list__body')]")).get(0);
         String firstRateText = firstRate.getText();
-        Assert.assertEquals(firstRateText, "1–й");
+        Assert.assertEquals(firstRateText, "1-й");
     }
 
     @Epic("Testing HABR")
@@ -184,7 +210,7 @@ public class HabrTest extends HabrBaseTest {
                 .users()
                 .openPersonalInfoFirstUser();
 
-        WebElement userRate = driver.findElement(By.xpath("//a[contains(@class, 'user-info__stats-item stacked-counter') and (@title='Рейтинг пользователя' )] "));
+        WebElement userRate = driver.findElement(By.xpath("//div[contains(@class, 'tm-user-card__rating') and (@title='Рейтинг пользователя' )] "));
         Assert.assertTrue(userRate.isDisplayed());
     }
 
@@ -199,7 +225,7 @@ public class HabrTest extends HabrBaseTest {
                 .posts()
                 .openFirstPost();
 
-        WebElement titlePost = driver.findElement(By.xpath("//h1[contains(@class, 'post__title')]"));
+        WebElement titlePost = driver.findElement(By.xpath("//h1[contains(@class, 'tm-article-snippet__title_h1')]//span"));
         String textTitlePost = titlePost.getText();
         Assert.assertEquals(habrPostsPage.getTitlePostFirst(), textTitlePost);
     }
@@ -207,7 +233,7 @@ public class HabrTest extends HabrBaseTest {
     @Epic("Testing HABR")
     @Feature(value="article page functionality")
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Checking that all info for author of the first article in the list is displayed")
+    @Description("Checking all info for author of the first article in the list is displayed")
     @Test
     public void habrTest10() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
@@ -215,14 +241,14 @@ public class HabrTest extends HabrBaseTest {
                     .posts()
                     .openPostAuthor();
 
-        WebElement rate = driver.findElement(By.xpath("(//li[@class='defination-list__item defination-list__item_profile-summary'])[1]//a"));
-        Assert.assertTrue(rate.isEnabled());
+        WebElement profileInfo = driver.findElement(By.xpath("//div[@class = 'tm-profile__body']"));
+        Assert.assertTrue(profileInfo.isEnabled());
     }
 
     @Epic("Testing HABR")
     @Feature(value="article page functionality")
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Checking the author of article has an invintation")
+    @Description("Checking the author has rating and votes")
     @Test
     public void habrTest11() {
         HabrMainPage habrMainPage = new HabrMainPage(driver);
@@ -230,8 +256,8 @@ public class HabrTest extends HabrBaseTest {
                 .posts()
                 .openPostAuthor();
 
-        WebElement invite = driver.findElement(By.xpath("//p[@class = 'profile-section__invited']"));
-        Assert.assertTrue(invite.isDisplayed());
+        WebElement rateAndVotes = driver.findElement(By.xpath("//div[contains(@class , 'tm-user-card__header-data')]"));
+        Assert.assertTrue(rateAndVotes.isDisplayed());
     }
 
 }

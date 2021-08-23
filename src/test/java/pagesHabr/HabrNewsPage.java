@@ -9,7 +9,7 @@ import java.util.List;
 
 public class HabrNewsPage extends HabrBasePage{
 
-    public List<WebElement> articles = driver.findElements(By.xpath("//li[contains(@class, 'content-list__item_post')]//h2[contains(@class, 'post__title')]"));
+    public List<WebElement> articles = driver.findElements(By.xpath("//h2[contains(@class, 'tm-article-snippet__title_h2')]//a//span"));
     private final String titleNewsFirst = articles.get(0).getText();
 
     public HabrNewsPage(WebDriver driver) {

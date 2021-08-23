@@ -10,8 +10,8 @@ import org.openqa.selenium.interactions.Actions;
 public class HabrUsersPage extends HabrBasePage {
 
     private Actions actions = new Actions(driver);
-    private By searchUserField = By.xpath("//*[@id=\"people_suggest\"]");
-    private WebElement firstUserInList = driver.findElements(By.xpath("//ul[@id='peoples']/li[contains(@class, 'content-list__item_users')]/div/div/div/a")).get(0);
+    private By searchUserField = By.xpath("//input[@name=\"searchQuery\"]");
+    private WebElement firstUserInList = driver.findElements(By.xpath("//div[@class='tm-users-list']//div[@class = 'tm-users-list__item'][1]//a[@class = 'tm-user-snippet__nickname']")).get(0);
 
     public HabrUsersPage(WebDriver driver) {
         super(driver);
